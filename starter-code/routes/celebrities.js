@@ -1,5 +1,6 @@
 const express = require('express');
 const Celebrity = require('../models/celebrity');
+const Movie = require('../models/movie');
 const router = express.Router();
 /*  */
 router.get('/celebrities', (req, res, next) => {
@@ -13,6 +14,19 @@ router.get('/celebrities', (req, res, next) => {
     console.log(err);
   })
 });
+
+router.get('/movies', (req, res, next) => {
+    // get all the movies from the database
+    Movie.find().populate('celebrity').then(moviesFromDatabase => {
+    
+      console.log(moviesFromDatabase);
+      res.render('movies/index', { movies: moviesFromDatabase });
+    }).catch(err => {
+      next();
+      console.log(err);
+    })
+  });
+
 router.get('/celebrities/:celebrityId', (req, res, next) => {
     // get all the celebrities from the database
     
@@ -33,13 +47,24 @@ router.get('/celebrities/:celebrityId', (req, res, next) => {
         res.render('celebrities/new');    
   });
 
+  router.get('/movies/new', (req, res, next) => {
+    console.log("hello");
+    Celebrity.find().then(celebs => {
+        res.render('movies/new',{celebs}); 
+    })
+         
+});
+
+
+
   router.post('/celebrities', (req, res) => {
     console.log(req.body);
-    const { name, occupation, catchPhrase,} = req.body;
+    const { name, occupation, catchPhrase,cast} = req.body;
     Celebrity.create({
       name,
       occupation,
       catchPhrase,
+      cast
     }).then(() => {
       console.log(`Success! ${name} was added to the database.`);
       res.redirect('/celebrities');
@@ -48,6 +73,24 @@ router.get('/celebrities/:celebrityId', (req, res, next) => {
       res.redirect('/new');
     })
   });
+
+  router.post('/movies', (req, res) => {
+    console.log(req.body);
+    const { title, genre, plot,} = req.body;
+    Movie.create({
+      title,
+      genre,
+      plot,
+    }).then(() => {
+      console.log(`Success! ${title} was added to the database.`);
+      res.redirect('/movies');
+    }).catch(err => {
+      console.log(err);
+      res.redirect('/movies/new');
+    })
+  });
+
+
 
   router.post('/celebrities/:id/delete', (req, res) => {
       console.log("I am deleting");

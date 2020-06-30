@@ -1,0 +1,16 @@
+<h2>Welcome to the list of your favourite Movies</h2>
+{{#each movies}}
+<p>Title :{{title}}</p>
+<p>Genre :{{genre}}</p>
+<p>Cast :{{cast}}</p>
+
+<form action="/movies/{{_id}}/delete" method="POST">
+    <button type="submit">Delete</button>
+</form>
+<form action="/movies/{{_id}}/edit" method="GET">
+    <button type="submit">Edit</button>
+</form>
+
+
+{{/each}}
+<a href="/movies/new">Add new</a>
