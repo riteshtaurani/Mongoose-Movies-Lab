@@ -2,7 +2,15 @@
 {{#each movies}}
 <p>Title :{{title}}</p>
 <p>Genre :{{genre}}</p>
-<p>Cast :{{cast}}</p>
+
+    
+    <span>Cast:</span>
+    <ul>
+    {{#each cast}}
+    <li>{{name}}</li>
+    {{/each}}
+    </ul>
+
 
 <form action="/movies/{{_id}}/delete" method="POST">
     <button type="submit">Delete</button>

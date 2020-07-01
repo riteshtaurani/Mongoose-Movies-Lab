@@ -17,7 +17,7 @@ router.get('/celebrities', (req, res, next) => {
 
 router.get('/movies', (req, res, next) => {
     // get all the movies from the database
-    Movie.find().populate('celebrity').then(moviesFromDatabase => {
+    Movie.find().populate('cast').then(moviesFromDatabase => {
     
       console.log(moviesFromDatabase);
       res.render('movies/index', { movies: moviesFromDatabase });
@@ -43,12 +43,12 @@ router.get('/celebrities/:celebrityId', (req, res, next) => {
   });
 
   router.get('/new', (req, res, next) => {
-      console.log("hello");
+      //console.log("hello");
         res.render('celebrities/new');    
   });
 
   router.get('/movies/new', (req, res, next) => {
-    console.log("hello");
+    //console.log("hello");
     Celebrity.find().then(celebs => {
         res.render('movies/new',{celebs}); 
     })
@@ -76,11 +76,12 @@ router.get('/celebrities/:celebrityId', (req, res, next) => {
 
   router.post('/movies', (req, res) => {
     console.log(req.body);
-    const { title, genre, plot,} = req.body;
+    const { title, genre, plot,cast} = req.body;
     Movie.create({
       title,
       genre,
       plot,
+      cast
     }).then(() => {
       console.log(`Success! ${title} was added to the database.`);
       res.redirect('/movies');
